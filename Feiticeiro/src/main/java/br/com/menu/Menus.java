@@ -35,10 +35,7 @@ public class Menus {
 
 			limparTela();
 
-			System.out.println("LOGIN:");
-			System.out.println("[1] Já possuo cadastro");
-			System.out.println("[2] Ainda não possuo cadastro. Desejo me cadastrar");
-			System.out.println("[3] Sair");
+			exibirMenuLogin();
 
 			String opcaoDigitada = reader.readLine();
 			opcao = Integer.parseInt(opcaoDigitada);
@@ -101,8 +98,6 @@ public class Menus {
 
 		limparTela();
 
-		boolean continuar = true;
-
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		TypedQuery<Usuario> resultadoLoginAndSenha = manager.createNamedQuery("Usuario.findByLoginAndSenha",
 				Usuario.class);
@@ -117,21 +112,37 @@ public class Menus {
 
 		List<Usuario> resultPesqLoginAndSenha = resultadoLoginAndSenha.getResultList();
 
-		String loginSys = null;
-		String senhaSys = null;
+		String loginSys = "";
+		String senhaSys = "";
 
 		for (Usuario usuario : resultPesqLoginAndSenha) {
 			loginSys = usuario.getLogin();
 			senhaSys = usuario.getSenha();
-		}
 
+		}
 
 		if ((!loginSys.equals(login)) && (senhaSys.equals(senha))) {
-			System.out.println("\nAcesso permitido!");
-			continuar = false;
-		} else {
 			System.out.println("\nLogin ou senha não encontrados");
+			
+//			System.out.println("\nLogin ou senha não encontrados");
+			System.out.println("Esqueceu ou deseja alterar sua senha?");
+			System.out.println("[1] Sim");
+			System.out.println("[2] Não (Sair)");
+
+		} else {
+			System.out.println("\nAcesso permitido!");
+
+			exibirMenuInicioJogo();
 		}
+
+	}
+
+	public void exibirMenuInicioJogo() {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+		System.out.println("SELECIONE SUA OPÇÃO");
+		System.out.println("[1] Novo jogo");
+		System.out.println("[2] Continuar");
 
 	}
 
