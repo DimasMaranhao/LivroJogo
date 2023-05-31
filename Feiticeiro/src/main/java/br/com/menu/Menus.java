@@ -43,17 +43,17 @@ public class Menus {
 			switch (opcao) {
 			case 1:
 
-				exibirMenuLogin();
+				cadastrarUsuario();
 				break;
 
 			case 2:
 
-				cadastrarUsuario();
-				break;
-
-			case 3:
 				continuar = false;
 				break;
+
+//			case 3:
+//				continuar = false;
+//				break;
 
 			default:
 				System.out.println("Opção inválida");
@@ -121,28 +121,87 @@ public class Menus {
 
 		}
 
-		if ((!loginSys.equals(login)) && (senhaSys.equals(senha))) {
+		if ((loginSys.equals(login)) && (senhaSys.equals(senha))) {
+
+			exibirMenuInicioJogo();
+
+		} else {
+
 			System.out.println("\nLogin ou senha não encontrados");
-			
-//			System.out.println("\nLogin ou senha não encontrados");
+
 			System.out.println("Esqueceu ou deseja alterar sua senha?");
 			System.out.println("[1] Sim");
 			System.out.println("[2] Não (Sair)");
 
-		} else {
-			System.out.println("\nAcesso permitido!");
-
-			exibirMenuInicioJogo();
 		}
 
 	}
 
-	public void exibirMenuInicioJogo() {
+	public void exibirMenuInicioJogo() throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+		limparTela();
 
 		System.out.println("SELECIONE SUA OPÇÃO");
 		System.out.println("[1] Novo jogo");
 		System.out.println("[2] Continuar");
+
+		String opcaoInicioJogo = reader.readLine();
+		int opcaoNovoJogo = Integer.parseInt(opcaoInicioJogo);
+
+		if (opcaoNovoJogo == 1) {
+
+			limparTela();
+
+			exibirMenuDificuldade();
+		}
+
+	}
+
+	public void exibirMenuDificuldade() throws IOException {
+
+		limparTela();
+
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		int opcaoDificuldadeFinal;
+		
+		
+		do {
+			
+			limparTela();
+			
+			System.out.println("SELECIONE A DIFICULDADE:");
+			System.out.println("[1] Fácil");
+			System.out.println("[2] Normal");
+			System.out.println("[3] Difícil");
+
+			String opcaoStrDificuldadeInic = reader.readLine();
+			int opcaoDificuldadeInic = Integer.parseInt(opcaoStrDificuldadeInic);
+
+			if (opcaoDificuldadeInic == 1) {
+				System.out.println(
+						"\n\nNa dificuldade FÁCIL, você terá 80% de chance de passar sempre que um TESTE DE SORTE for exigido.");
+				System.out.println("Você tem certeza de deseja jogar na dificuldade FÁCIL?");
+				System.out.println("[1] Sim");
+				System.out.println("[2] Não");
+			} else if (opcaoDificuldadeInic == 2) {
+				System.out.println(
+						"\n\nNa dificuldade NORMAL, você terá 50% de chance de passar sempre que um TESTE DE SORTE for exigido.");
+				System.out.println("Você tem certeza de deseja jogar na dificuldade NORMAL?");
+				System.out.println("[1] Sim");
+				System.out.println("[2] Não");
+			} else {
+				System.out.println(
+						"\n\nNa dificuldade DIFÍCIL, você terá apenas 20% de chance de passar sempre que um TESTE DE SORTE for exigido.");
+				System.out.println("Você tem certeza de deseja jogar na dificuldade DIFÍCIL?");
+				System.out.println("[1] Sim");
+				System.out.println("[2] Não");
+			}
+
+			String opcaoStrDificuldadeFinal = reader.readLine();
+			opcaoDificuldadeFinal = Integer.parseInt(opcaoStrDificuldadeFinal);
+
+		} while (opcaoDificuldadeFinal != 1);
 
 	}
 
