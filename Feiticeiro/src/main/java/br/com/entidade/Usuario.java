@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Entity
 @NamedQueries({ 
 	@NamedQuery(name = "Usuario.findByLoginAndSenha", query = "select a from Usuario a where login like :login and senha like :senha"), 
-//	@NamedQuery(name = "Usuario.findBySenha", query = "select a from Usuario a where senha like :senha"), 
+	@NamedQuery(name = "Usuario.findByLoginAndEmail", query = "select a from Usuario a where login like :login and email like :email"), 
 
 })
 @Table (name = "usuario")
@@ -26,10 +26,11 @@ public class Usuario {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "GERADOR-FEITICEIRO")
 	@SequenceGenerator(name = "GERADOR-FEITICEIRO", sequenceName = "FEITICEIRO", initialValue = 1, allocationSize = 1)
-	private Long id;
+	private String email;
+	
 
 	private String nome;
-	private String email;
+	private Long id;
 	private String login;
 	private String senha;
 	

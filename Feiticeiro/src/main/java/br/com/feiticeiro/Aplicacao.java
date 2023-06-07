@@ -15,11 +15,9 @@ public class Aplicacao {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("FEITICEIRO-PU");
 		EntityManager em = emf.createEntityManager();
 
-		
 		Menus menu = new Menus(emf, null, em);
-		
-		menu.exibirMenuInicial();
 
+		menu.exibirMenuInicial();
 
 	}
 
