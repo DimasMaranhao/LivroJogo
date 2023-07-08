@@ -43,60 +43,12 @@ public class UsuarioDAO {
 		em.merge(usuario);
 		em.getTransaction().commit();
 	}
-
-	public boolean easyRandom() {
-
-		Random rd = new Random();
-		boolean passou = false;
-
-		int min = 1;
-		int max = 10;
-
-		int resultadoSorte = rd.nextInt(max - min) + min;
-
-		if (resultadoSorte >= 3) {
-			passou = true;
-		}
-
-		return passou;
-
-	}
-
-	public boolean normalRandom() {
-
-		Random rd = new Random();
-		boolean passou = false;
-
-		int min = 1;
-		int max = 10;
-
-		int resultadoSorte = rd.nextInt(max - min) + min;
-
-		if (resultadoSorte > 5) {
-			passou = true;
-		}
-
-		return passou;
-
-	}
-
-	public boolean dificilRandom() {
-
-		Random rd = new Random();
-		boolean passou = false;
-
-		int min = 1;
-		int max = 10;
-
-		int resultadoSorte = rd.nextInt(max - min) + min;
-
-		if (resultadoSorte > 8) {
-			passou = true;
-		}
-
-		return passou;
-
-	}
 	
 	
+	public void excluirUser(Usuario usuario) {
+		em.getTransaction().begin();
+		em.remove(usuario);
+		em.getTransaction().commit();
+	}
+
 }
