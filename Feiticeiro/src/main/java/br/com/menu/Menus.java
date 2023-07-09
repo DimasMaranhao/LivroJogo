@@ -229,7 +229,8 @@ public class Menus {
 	public void exibirMenuDificuldade() throws IOException {
 
 		limparTela();
-
+		
+		String login = this.userGeral; 
 		InfoJogo info = new InfoJogo();
 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -263,6 +264,7 @@ public class Menus {
 
 				dificuldade = "facil";
 				info.setDificuldade(dificuldade);
+				info.setLogin(login);
 
 			} else if (opcaoDificuldadeInic == 2) {
 
@@ -276,6 +278,7 @@ public class Menus {
 
 				dificuldade = "normal";
 				info.setDificuldade(dificuldade);
+				info.setLogin(login);
 
 			} else if (opcaoDificuldadeInic == 3) {
 
@@ -289,6 +292,7 @@ public class Menus {
 
 				dificuldade = "dificil";
 				info.setDificuldade(dificuldade);
+				info.setLogin(login);
 
 			} else if (opcaoDificuldadeInic == 4) {
 				exibirMenuInicioJogo();
@@ -302,7 +306,7 @@ public class Menus {
 
 		} while (opcaoDificuldadeFinal != 1);
 
-		daoInfo.atualizarInfo(info);
+		daoInfo.atualizar(info);
 
 	}
 
@@ -647,27 +651,43 @@ public class Menus {
 
 				String login = this.userGeral;
 				String SenhaSys = "";
-
+				String loginSysUser = "";
+				String loginSysInfo = "";
+				
+				TypedQuery<Usuario> resultadoLoginUser = manager.createQuery("delete from Usuario where login like:login", Usuario.class);
+				TypedQuery<InfoJogo> resultadoLoginInfo = manager.createQuery("delete from InfoJogo where login like:login", InfoJogo.class);
 				TypedQuery<Usuario> resultadoSenha = manager.createNamedQuery("Usuario.findBySenha", Usuario.class);
 
 				System.out.println("\nDigite sua senha:");
 				String senha = reader.readLine();
 
+				resultadoLoginUser.setParameter("login", login);
+				resultadoLoginInfo.setParameter("login", login);
 				resultadoSenha.setParameter("senha", senha);
 
+				List<Usuario> resultPesqLoginUser = resultadoLoginUser.getResultList();
+				List<InfoJogo> resultPesqLoginInfo = resultadoLoginInfo.getResultList();
 				List<Usuario> resultPesqSenha = resultadoSenha.getResultList();
+				
 
 				String senhaSys = "";
 
 				for (Usuario usuario : resultPesqSenha) {
 
+					loginSysUser = usuario.getLogin();					
 					senhaSys = usuario.getSenha();
-
-					if (senha.equals(senhaSys)) {
-
+					
+					for (InfoJogo infoJogo : resultPesqLoginInfo) {
 						
-						
-						daoUser.excluirUser(usuario);
+						loginSysInfo = infoJogo.getLogin();
+					}
+
+					if ((login.equals(loginSysUser) && (login.equals(loginSysInfo) && (senha.equals(senhaSys))))) {						
+										
+						usuario.setLogin(login);
+						manager.remove(usuario);
+						info.setLogin(login);
+						manager.remove(info);						
 						
 						System.out.println("SUA CONTA FOI APAGADA COM  SUCESSO...");
 						
