@@ -46,8 +46,8 @@ public class UsuarioDAO {
 	
 	
 	public void excluirUser(Usuario usuario) {
-		em.getTransaction().begin();
 		em.remove(usuario);
+		em.getTransaction().begin();		
 		em.getTransaction().commit();
 	}
 

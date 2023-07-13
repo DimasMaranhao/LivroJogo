@@ -229,8 +229,8 @@ public class Menus {
 	public void exibirMenuDificuldade() throws IOException {
 
 		limparTela();
-		
-		String login = this.userGeral; 
+
+		String login = this.userGeral;
 		InfoJogo info = new InfoJogo();
 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -653,44 +653,46 @@ public class Menus {
 				String SenhaSys = "";
 				String loginSysUser = "";
 				String loginSysInfo = "";
-				
-				TypedQuery<Usuario> resultadoLoginUser = manager.createQuery("delete from Usuario where login like:login", Usuario.class);
-				TypedQuery<InfoJogo> resultadoLoginInfo = manager.createQuery("delete from InfoJogo where login like:login", InfoJogo.class);
-				TypedQuery<Usuario> resultadoSenha = manager.createNamedQuery("Usuario.findBySenha", Usuario.class);
+
+				TypedQuery<Usuario> resultadoLoginAndSenhaUser = manager.createNamedQuery("Usuario.findByLoginAndSenha",
+						Usuario.class);
+				TypedQuery<InfoJogo> resultadoLoginInfo = manager.createNamedQuery("InfoJogo.findByLogin",
+						InfoJogo.class);
 
 				System.out.println("\nDigite sua senha:");
 				String senha = reader.readLine();
 
-				resultadoLoginUser.setParameter("login", login);
+				resultadoLoginAndSenhaUser.setParameter("login", login);
 				resultadoLoginInfo.setParameter("login", login);
-				resultadoSenha.setParameter("senha", senha);
+				resultadoLoginAndSenhaUser.setParameter("senha", senha);
 
-				List<Usuario> resultPesqLoginUser = resultadoLoginUser.getResultList();
+				List<Usuario> resultPesqLoginUser = resultadoLoginAndSenhaUser.getResultList();
 				List<InfoJogo> resultPesqLoginInfo = resultadoLoginInfo.getResultList();
-				List<Usuario> resultPesqSenha = resultadoSenha.getResultList();
-				
+
+				// FAZER QUERY PRA PEGAR O ID, E UTILIZÁ-LO PRA FAZER UM FIND ANTES DO DELETE.
 
 				String senhaSys = "";
 
-				for (Usuario usuario : resultPesqSenha) {
+				for (Usuario usuario : resultPesqLoginUser) {
 
-					loginSysUser = usuario.getLogin();					
+					loginSysUser = usuario.getLogin();
 					senhaSys = usuario.getSenha();
-					
+
 					for (InfoJogo infoJogo : resultPesqLoginInfo) {
-						
+
 						loginSysInfo = infoJogo.getLogin();
+
 					}
 
-					if ((login.equals(loginSysUser) && (login.equals(loginSysInfo) && (senha.equals(senhaSys))))) {						
-										
-						usuario.setLogin(login);
-						manager.remove(usuario);
-						info.setLogin(login);
-						manager.remove(info);						
-						
+					if ((login.equals(loginSysUser) && (login.equals(loginSysInfo) && (senha.equals(senhaSys))))) {
+
+						usuario = manager.find(Usuario.class, usuario.getId());
+						manager.remove(usuario);						
+						info = manager.find(InfoJogo.class, info.getId());
+						manager.remove(info);
+
 						System.out.println("SUA CONTA FOI APAGADA COM  SUCESSO...");
-						
+
 						System.exit(0);
 
 					}
