@@ -20,22 +20,25 @@ public class UsuarioDAO {
 		em.getTransaction().commit();
 	}
 
-	public Usuario pesquisarPorLogin(String login) {
-
-		return em.find(Usuario.class, login);
+	public Usuario pesquisarPorLogin(Usuario usuario, String login) {
+		Class classe = usuario.getClass();
+		return (Usuario) em.find(classe, login);
 
 	}
 
-	public Usuario pesquisarPorSenha(String senha) {
-		return em.find(Usuario.class, senha);
+	public Usuario pesquisarPorSenha(Usuario usuario, String senha) {
+		Class classe = usuario.getClass();
+		return (Usuario) em.find(classe, senha);
 	}
 
-	public Usuario pesquisarPorEmail(String email) {
-		return em.find(Usuario.class, email);
+	public Usuario pesquisarPorEmail(Usuario usuario, String email) {
+		Class classe = usuario.getClass();
+		return (Usuario) em.find(classe, email);
 	}
 
-	public Usuario pesquisarPorId(Long id) {
-		return em.find(Usuario.class, id);
+	public Usuario pesquisarPorId(Usuario usuario, Long id) {
+		Class classe = usuario.getClass();
+		return (Usuario) em.find(classe, id);
 	}
 
 	public void atualizar(Usuario usuario) {
@@ -43,11 +46,10 @@ public class UsuarioDAO {
 		em.merge(usuario);
 		em.getTransaction().commit();
 	}
-	
-	
+
 	public void excluirUser(Usuario usuario) {
 		em.remove(usuario);
-		em.getTransaction().begin();		
+		em.getTransaction().begin();
 		em.getTransaction().commit();
 	}
 

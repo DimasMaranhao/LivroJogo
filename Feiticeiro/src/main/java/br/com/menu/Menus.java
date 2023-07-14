@@ -653,6 +653,8 @@ public class Menus {
 				String SenhaSys = "";
 				String loginSysUser = "";
 				String loginSysInfo = "";
+				long idUser = 0;
+				long idInfo = 0;
 
 				TypedQuery<Usuario> resultadoLoginAndSenhaUser = manager.createNamedQuery("Usuario.findByLoginAndSenha",
 						Usuario.class);
@@ -663,33 +665,36 @@ public class Menus {
 				String senha = reader.readLine();
 
 				resultadoLoginAndSenhaUser.setParameter("login", login);
-				resultadoLoginInfo.setParameter("login", login);
 				resultadoLoginAndSenhaUser.setParameter("senha", senha);
+				resultadoLoginInfo.setParameter("login", login);
 
-				List<Usuario> resultPesqLoginUser = resultadoLoginAndSenhaUser.getResultList();
+				List<Usuario> resultPesqLoginAndSenhaUser = resultadoLoginAndSenhaUser.getResultList();
 				List<InfoJogo> resultPesqLoginInfo = resultadoLoginInfo.getResultList();
-
-				// FAZER QUERY PRA PEGAR O ID, E UTILIZÁ-LO PRA FAZER UM FIND ANTES DO DELETE.
 
 				String senhaSys = "";
 
-				for (Usuario usuario : resultPesqLoginUser) {
+				for (Usuario usuario : resultPesqLoginAndSenhaUser) {
 
 					loginSysUser = usuario.getLogin();
 					senhaSys = usuario.getSenha();
+					idUser = usuario.getId();
 
 					for (InfoJogo infoJogo : resultPesqLoginInfo) {
 
 						loginSysInfo = infoJogo.getLogin();
-
+						idInfo = infoJogo.getId();
 					}
 
 					if ((login.equals(loginSysUser) && (login.equals(loginSysInfo) && (senha.equals(senhaSys))))) {
 
-						usuario = manager.find(Usuario.class, usuario.getId());
-						manager.remove(usuario);						
-						info = manager.find(InfoJogo.class, info.getId());
-						manager.remove(info);
+						usuario = daoUser.pesquisarPorId(usuario, idUser);
+						daoUser.excluirUser(usuario);
+
+						for (InfoJogo info1 : resultPesqLoginInfo) {
+
+							info1 = daoInfo.pesquisarPorId(info1, idInfo);
+							daoInfo.excluirInfo(info1);
+						}
 
 						System.out.println("SUA CONTA FOI APAGADA COM  SUCESSO...");
 
